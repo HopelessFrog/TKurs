@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34707.107
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TKurs", "TKurs\TKurs.csproj", "{65942D37-7F59-4857-85D5-2196EA8C5EDD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{65942D37-7F59-4857-85D5-2196EA8C5EDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65942D37-7F59-4857-85D5-2196EA8C5EDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65942D37-7F59-4857-85D5-2196EA8C5EDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65942D37-7F59-4857-85D5-2196EA8C5EDD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {66E19A5B-2FF4-414C-B62C-45CC63B6C873}
+	EndGlobalSection
+EndGlobal

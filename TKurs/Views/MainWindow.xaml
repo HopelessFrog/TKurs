@@ -1,0 +1,858 @@
+﻿<Window x:Class="TKurs.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TKurs"
+        xmlns:viewModels="clr-namespace:TKurs.ViewModels"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:s3D="http://schemas.abtsoftware.co.uk/scichart3D"
+        mc:Ignorable="d"
+        xmlns:extensions="clr-namespace:SciChart.Charting3D.Common.Extensions;assembly=SciChart.Charting3D"
+        xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+        WindowState="Maximized"
+        xmlns:wpf="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+        Title="MainWindow" Height="1080" Width="1920">
+
+    <Window.DataContext>
+        <viewModels:MainViewModel />
+    </Window.DataContext>
+    <Grid>
+        <materialDesign:Card>
+            <TabControl
+                VerticalContentAlignment="Top"
+                materialDesign:ColorZoneAssist.Mode="PrimaryMid"
+                Style="{StaticResource MaterialDesignNavigationRailTabControl}">
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel
+                            Width="auto"
+                            Height="auto">
+                            <materialDesign:PackIcon
+                                Width="24"
+                                Height="24"
+                                HorizontalAlignment="Center"
+                                Kind="Account" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                Text="Users" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid>
+                        <Canvas ZIndex="100">
+                            <Button Canvas.Right="10"  Canvas.Bottom="10"  Command="{Binding SaveUsersCommand}" FontSize="40" MinHeight="100" MinWidth="300" Margin="10" Content="Save" HorizontalAlignment="Right" VerticalAlignment="Bottom"></Button>
+                        </Canvas>
+
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                            <ListBox ItemsSource="{Binding Users}" x:Name="userList"
+                                     Style="{StaticResource MaterialDesignCardsListBox}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Viewbox>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox MinWidth="100"
+                                                         materialDesign:HintAssist.Hint="Login"
+                                                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                         HorizontalContentAlignment="Center"
+                                                         Margin="5,0,6,0"
+                                                         VerticalAlignment="Center"
+                                                         VerticalContentAlignment="Center"
+                                                         Text="{Binding Login}" />
+
+                                                <PasswordBox
+                                                    Margin="10"
+                                                    materialDesign:PasswordBoxAssist.Password="{Binding Path=Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
+                                                    materialDesign:HintAssist.Hint="Password"
+                                                    materialDesign:TextFieldAssist.HasClearButton="True"
+                                                    IsEnabled="{Binding ElementName=RevealPasswordOutlinedEnabled, Path=IsChecked}"
+                                                    Style="{StaticResource MaterialDesignOutlinedRevealPasswordBox}"
+                                                    VerticalContentAlignment="Bottom" />
+
+
+                                                <StackPanel VerticalAlignment="Bottom" Margin="0,2,0,0"
+                                                            Orientation="Vertical">
+                                                    <ToggleButton
+                                                        IsChecked="{Binding IsAdmin}"
+                                                        Style="{StaticResource MaterialDesignFlatToggleButton}"
+                                                        ToolTip="MaterialDesignFlatToggleButton">
+                                                        <materialDesign:PackIcon
+                                                            Width="30"
+                                                            Height="30"
+                                                            Kind="ShieldCrownOutline" />
+
+                                                    </ToggleButton>
+                                                    <Label HorizontalAlignment="Center" Content="admin" />
+                                                </StackPanel>
+                                                <Button
+                                                    Margin="0,0,0,15"
+                                                    Command="{Binding Path=DataContext.DeleteUserCommand,
+                                                                RelativeSource={RelativeSource Mode=FindAncestor,
+                                                 AncestorType=Window}}"
+                                                    CommandParameter="{Binding }"
+
+
+                                                    HorizontalAlignment="Right"
+                                                    Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                                    ToolTip="MaterialDesignFloatingActionMiniLightButton">
+                                                    <materialDesign:PackIcon
+                                                        Width="30"
+                                                        Height="30"
+                                                        Kind="Delete" />
+                                                </Button>
+                                            </StackPanel>
+                                        </Viewbox>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </ScrollViewer>
+                    </Grid>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel
+                            Width="auto"
+                            Height="auto">
+                            <materialDesign:PackIcon
+                                Width="24"
+                                Height="24"
+                                HorizontalAlignment="Center"
+                                Kind="Blur" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                Text="Methods" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid>
+                            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                <ListBox ItemsSource="{Binding Methods}" x:Name="materialList"
+                                         Style="{StaticResource MaterialDesignCardsListBox}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Viewbox MaxHeight="150">
+                                                <Grid>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBox
+
+                                                            MinWidth="300"
+                                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                            HorizontalContentAlignment="Center"
+                                                            Margin="5,4,6,4"
+                                                            VerticalAlignment="Center"
+                                                            VerticalContentAlignment="Center"
+                                                            Text="{Binding Name}" />
+
+                                                        <Button
+                                                            Margin="3"
+
+                                                            VerticalAlignment="Center"
+
+                                                            Command="{Binding Path=DataContext.EditMethodCommand,
+                                                    RelativeSource={RelativeSource Mode=FindAncestor,
+                                                    AncestorType=Window}}"
+                                                            CommandParameter="{Binding }"
+
+
+                                                            HorizontalAlignment="Right"
+                                                            Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                                            ToolTip="MaterialDesignFloatingActionMiniLightButton">
+                                                            <materialDesign:PackIcon
+                                                                Width="30"
+                                                                Height="30"
+                                                                Kind="Pencil" />
+                                                        </Button>
+                                                        <Button
+                                                            Margin="3"
+                                                            VerticalAlignment="Center"
+                                                            Command="{Binding Path=DataContext.DeleteMethodCommand,
+                                                     RelativeSource={RelativeSource Mode=FindAncestor,
+                                                    AncestorType=Window}}"
+                                                            CommandParameter="{Binding }"
+
+
+                                                            HorizontalAlignment="Right"
+                                                            Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                                            ToolTip="MaterialDesignFloatingActionMiniLightButton">
+                                                            <materialDesign:PackIcon
+                                                                Width="30"
+                                                                Height="30"
+                                                                Kind="Delete" />
+                                                        </Button>
+                                                    </StackPanel>
+
+                                                </Grid>
+                                            </Viewbox>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </ScrollViewer>
+                            <Button
+                                Command="{Binding AddMethodCommand }"
+                                HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                Margin="10" Style="{ StaticResource MaterialDesignFloatingActionLightButton}">
+                                <materialDesign:PackIcon
+                                    Width="40"
+                                    Height="40"
+                                    Kind="Plus" />
+                            </Button>
+
+                        </Grid>
+
+
+                        <Grid Grid.Column="1">
+                            <GroupBox
+                                Margin="2"
+                                Header="Property">
+
+                                <StackPanel Orientation="Vertical">
+                                    <TextBox MinWidth="100"
+                                             FontSize="12"
+                                             materialDesign:HintAssist.Hint="Name"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             HorizontalContentAlignment="Left"
+                                             Margin="0,2,0,2"
+                                             VerticalAlignment="Center"
+                                             VerticalContentAlignment="Center"
+
+                                             Text="{Binding Method.Name}" />
+
+                                </StackPanel>
+
+                            </GroupBox>
+                            <Button
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                Margin="10"
+                                Command="{Binding SaveCommand}"
+                                Content="Save"
+                                Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
+                                ToolTip="Resource name: MaterialDesignRaisedSecondaryLightButton" />
+                        </Grid>
+                    </Grid>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel
+                            Width="auto"
+                            Height="auto">
+                            <materialDesign:PackIcon
+                                Width="24"
+                                Height="24"
+                                HorizontalAlignment="Center"
+                                Kind="MathCompass" />
+                            <TextBlock
+                                FontSize="13"
+                                HorizontalAlignment="Center"
+                                Text="Tasks" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid>
+                                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                              VerticalScrollBarVisibility="Auto">
+                                    <ListBox ItemsSource="{Binding Tasks}" x:Name="TaskList"
+                                             Style="{StaticResource MaterialDesignCardsListBox}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Viewbox MaxHeight="100">
+                                                    <Grid>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBox
+
+                                                                MinWidth="400"
+                                                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                                HorizontalContentAlignment="Center"
+                                                                Margin="5,4,6,4"
+                                                                VerticalAlignment="Center"
+                                                                VerticalContentAlignment="Center"
+                                                                Text="{Binding Formulaa}" />
+
+                                                            <Button
+                                                                Margin="3"
+
+                                                                VerticalAlignment="Center"
+
+                                                                Command="{Binding Path=DataContext.EditTaskCommand,
+                                     RelativeSource={RelativeSource Mode=FindAncestor,
+                                     AncestorType=Window}}"
+                                                                CommandParameter="{Binding }"
+
+
+                                                                HorizontalAlignment="Right"
+                                                                Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                                                ToolTip="MaterialDesignFloatingActionMiniLightButton">
+                                                                <materialDesign:PackIcon
+                                                                    Width="30"
+                                                                    Height="30"
+                                                                    Kind="Pencil" />
+                                                            </Button>
+                                                            <Button
+                                                                Margin="3"
+                                                                VerticalAlignment="Center"
+                                                                Command="{Binding Path=DataContext.DeleteTaskCommand,
+                                      RelativeSource={RelativeSource Mode=FindAncestor,
+                                     AncestorType=Window}}"
+                                                                CommandParameter="{Binding }"
+
+
+                                                                HorizontalAlignment="Right"
+                                                                Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                                                ToolTip="MaterialDesignFloatingActionMiniLightButton">
+                                                                <materialDesign:PackIcon
+                                                                    Width="30"
+                                                                    Height="30"
+                                                                    Kind="Delete" />
+                                                            </Button>
+                                                        </StackPanel>
+
+                                                    </Grid>
+                                                </Viewbox>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </ScrollViewer>
+                                <Button
+                                    Command="{Binding AddTaskCommand }"
+                                    HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                    Margin="10" Style="{ StaticResource MaterialDesignFloatingActionLightButton}">
+                                    <materialDesign:PackIcon
+                                        Width="40"
+                                        Height="40"
+                                        Kind="Plus" />
+                                </Button>
+
+                            </Grid>
+
+
+                            <Grid Grid.Column="1">
+                                <GroupBox
+                                    Margin="2"
+                                    Header="Property">
+
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBox MinWidth="100"
+                                                 FontSize="12"
+                                                 materialDesign:HintAssist.Hint="Formula"
+                                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                 HorizontalContentAlignment="Left"
+                                                 Margin="0,2,0,2"
+                                                 VerticalAlignment="Center"
+                                                 VerticalContentAlignment="Center"
+
+                                                 Text="{Binding Task.Formulaa}" />
+                                        <TextBox
+                                            Text="{Binding Task.Descriptiom}"
+                                            Height="100"
+                                            VerticalAlignment="Top"
+                                            materialDesign:HintAssist.Hint="Description"
+                                            AcceptsReturn="True"
+                                            IsEnabled="{Binding Path=IsChecked, ElementName=MaterialDesignOutlinedTextBoxEnabledComboBox}"
+                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                            TextWrapping="Wrap"
+                                            VerticalScrollBarVisibility="Auto" />
+
+                                    </StackPanel>
+
+                                </GroupBox>
+                                <Button
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Bottom"
+                                    Margin="10"
+                                    Command="{Binding SaveCommand}"
+                                    Content="Save"
+                                    Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
+                                    ToolTip="Resource name: MaterialDesignRaisedSecondaryLightButton" />
+                            </Grid>
+                        </Grid>
+
+
+                    </Grid>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel
+                            Width="auto"
+                            Height="auto">
+                            <materialDesign:PackIcon
+                                Width="24"
+                                Height="24"
+                                HorizontalAlignment="Center"
+                                Kind="CalculatorVariant" />
+                            <TextBlock
+                                FontSize="13"
+                                HorizontalAlignment="Center"
+                                Text="Calculate" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+
+
+                            <ComboBox
+
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Top"
+                                Margin="4,4,4,4"
+                                SelectedItem="{Binding SelectedTask}"
+                                materialDesign:HintAssist.Hint="MathModel"
+                                materialDesign:TextFieldAssist.HasClearButton="True"
+                                ItemsSource="{Binding Tasks}"
+                                Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                        </Grid>
+
+                        <Grid Visibility="{Binding VisibilityError}">
+                            <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="35"
+                                   Content="This mathematical model is not ready yet" />
+
+
+                        </Grid>
+                        <Grid Visibility="{Binding VisibilityT}">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="2*" />
+
+                            </Grid.ColumnDefinitions>
+                            <Grid Margin="0,60,0,0">
+                                <materialDesign:Card Margin="3">
+                                    <ScrollViewer Margin="2" HorizontalScrollBarVisibility="Disabled"
+                                                  VerticalScrollBarVisibility="Auto">
+
+                                        <StackPanel>
+
+                                            <TextBox
+                                                Margin="4"
+                                                Text="{Binding SelectedTask.Descriptiom}"
+                                                Height="100"
+                                                VerticalAlignment="Top"
+                                                materialDesign:HintAssist.Hint="Description"
+                                                AcceptsReturn="True"
+                                                IsEnabled="{Binding Path=IsChecked, ElementName=MaterialDesignOutlinedTextBoxEnabledComboBox}"
+                                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                TextWrapping="Wrap"
+
+                                                VerticalScrollBarVisibility="Auto" />
+                                            <ComboBox
+
+                                                HorizontalAlignment="Stretch"
+                                                Margin="4"
+                                                SelectedItem="{Binding SelectedMethod}"
+                                                materialDesign:HintAssist.Hint="Method"
+
+                                                ItemsSource="{Binding Methods}"
+                                                Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                                            <StackPanel IsEnabled="{Binding SelectedMethod.Real}"
+                                                        HorizontalAlignment="Center"
+                                                        Orientation="Horizontal">
+                                                <RadioButton
+                                                    Margin="4"
+
+                                                    Content="Max"
+                                                    IsChecked="True"
+                                                    Style="{StaticResource MaterialDesignTabRadioButtonBottom}" />
+                                                <RadioButton
+                                                    Margin="4"
+                                                    Content="Min"
+                                                    IsChecked="{Binding FindMInimum}"
+                                                    Style="{StaticResource MaterialDesignTabRadioButtonTop}" />
+                                            </StackPanel>
+                                            <GroupBox IsEnabled="{Binding SelectedMethod.Real}" Header="Parameters">
+                                                <StackPanel>
+                                                    <TextBox
+                                                        materialDesign:TextFieldAssist.SuffixText="Кпа"
+
+                                                        materialDesign:HintAssist.Hint="∆р1"
+                                                        MinWidth="100"
+                                                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                        HorizontalContentAlignment="Left"
+                                                        Margin="5,4,6,4"
+                                                        VerticalAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        Text="{Binding FiltrationProcess.Δp1}" />
+                                                    <TextBox
+                                                        materialDesign:TextFieldAssist.SuffixText="Кпа"
+
+                                                        materialDesign:HintAssist.Hint="∆р2"
+                                                        MinWidth="100"
+                                                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                        HorizontalContentAlignment="Left"
+                                                        Margin="5,4,6,4"
+                                                        VerticalAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        Text="{Binding FiltrationProcess.Δp2}" />
+                                                    <TextBox
+                                                        materialDesign:TextFieldAssist.SuffixText="Шт"
+
+                                                        materialDesign:HintAssist.Hint="N"
+                                                        MinWidth="100"
+                                                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                        HorizontalContentAlignment="Left"
+                                                        Margin="5,4,6,4"
+                                                        VerticalAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        Text="{Binding FiltrationProcess.N}" />
+                                                    <TextBox
+                                                        materialDesign:TextFieldAssist.SuffixText="м^3/ч"
+
+                                                        materialDesign:HintAssist.Hint="G"
+                                                        MinWidth="100"
+                                                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                        HorizontalContentAlignment="Left"
+                                                        Margin="5,4,6,4"
+                                                        VerticalAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        Text="{Binding FiltrationProcess.G}" />
+                                                    <TextBox
+
+                                                        materialDesign:HintAssist.Hint="α"
+                                                        MinWidth="100"
+                                                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                        HorizontalContentAlignment="Left"
+                                                        Margin="5,4,6,4"
+                                                        VerticalAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        Text="{Binding FiltrationProcess.α}" />
+                                                    <TextBox
+
+                                                        materialDesign:HintAssist.Hint="β"
+                                                        MinWidth="100"
+                                                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                        HorizontalContentAlignment="Left"
+                                                        Margin="5,4,6,4"
+                                                        VerticalAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        Text="{Binding FiltrationProcess.β}" />
+                                                    <TextBox
+
+                                                        materialDesign:HintAssist.Hint="μ"
+                                                        MinWidth="100"
+                                                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                        HorizontalContentAlignment="Left"
+                                                        Margin="5,4,6,4"
+                                                        VerticalAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        Text="{Binding FiltrationProcess.μ}" />
+                                                    <TextBox
+
+                                                        materialDesign:HintAssist.Hint="γ"
+                                                        MinWidth="100"
+                                                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                        HorizontalContentAlignment="Left"
+                                                        Margin="5,4,6,4"
+                                                        VerticalAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        Text="{Binding FiltrationProcess.γ}" />
+                                                    <TextBox
+
+                                                        materialDesign:HintAssist.Hint="β1"
+                                                        MinWidth="100"
+                                                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                        HorizontalContentAlignment="Left"
+                                                        Margin="5,4,6,4"
+                                                        VerticalAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        Text="{Binding FiltrationProcess.β1}" />
+                                                    <TextBox
+
+                                                        materialDesign:HintAssist.Hint="μ1"
+                                                        MinWidth="100"
+                                                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                        HorizontalContentAlignment="Left"
+                                                        Margin="5,4,6,4"
+                                                        VerticalAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        Text="{Binding FiltrationProcess.μ1}" />
+                                                    <TextBox
+                                                        materialDesign:TextFieldAssist.SuffixText="у.е."
+
+                                                        materialDesign:HintAssist.Hint="Cost per m^3"
+                                                        MinWidth="100"
+                                                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                        HorizontalContentAlignment="Left"
+                                                        Margin="5,4,6,4"
+                                                        VerticalAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        Text="{Binding FiltrationProcess.CostPerCubicMeter}" />
+                                                </StackPanel>
+
+
+                                            </GroupBox>
+                                            <GroupBox IsEnabled="{Binding SelectedMethod.Real}" Header="Restrictions">
+                                                <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
+
+
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBox
+                                                            materialDesign:TextFieldAssist.SuffixText="°С"
+
+                                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                            HorizontalContentAlignment="Center"
+                                                            Margin="5,4,6,4"
+                                                            VerticalAlignment="Center"
+                                                            VerticalContentAlignment="Center"
+                                                            Text="{Binding MinT1}" />
+                                                        <TextBox
+                                                            IsReadOnly="True"
+
+
+                                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                            HorizontalContentAlignment="Center"
+                                                            Margin="5,4,6,4"
+                                                            VerticalAlignment="Center"
+                                                            VerticalContentAlignment="Center">
+                                                            &lt;
+                                                            T1
+                                                            &lt;
+
+                                                        </TextBox>
+                                                        <TextBox
+                                                            materialDesign:TextFieldAssist.SuffixText="°С"
+
+                                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                            HorizontalContentAlignment="Center"
+                                                            Margin="5,4,6,4"
+                                                            VerticalAlignment="Center"
+                                                            VerticalContentAlignment="Center"
+                                                            Text="{Binding MaxT1}" />
+
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBox
+                                                            materialDesign:TextFieldAssist.SuffixText="°С"
+
+                                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                            HorizontalContentAlignment="Center"
+                                                            Margin="5,4,6,4"
+                                                            VerticalAlignment="Center"
+                                                            VerticalContentAlignment="Center"
+                                                            Text="{Binding MinT2}" />
+                                                        <TextBox
+                                                            IsReadOnly="True"
+
+
+                                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                            HorizontalContentAlignment="Center"
+                                                            Margin="5,4,6,4"
+                                                            VerticalAlignment="Center"
+                                                            VerticalContentAlignment="Center">
+                                                            &lt;
+                                                            T2
+                                                            &lt;
+
+                                                        </TextBox>
+                                                        <TextBox
+                                                            materialDesign:TextFieldAssist.SuffixText="°С"
+
+                                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                            HorizontalContentAlignment="Center"
+                                                            Margin="5,4,6,4"
+                                                            VerticalAlignment="Center"
+                                                            VerticalContentAlignment="Center"
+                                                            Text="{Binding MaxT2}" />
+
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+
+                                                        <TextBox
+                                                            IsReadOnly="True"
+
+
+                                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                            HorizontalContentAlignment="Center"
+                                                            Margin="5,4,6,4"
+                                                            VerticalAlignment="Center"
+                                                            VerticalContentAlignment="Center">
+                                                            0.5* T1 + T2
+                                                            &lt;
+                                                            =
+
+                                                        </TextBox>
+                                                        <TextBox
+                                                            materialDesign:TextFieldAssist.SuffixText="°С"
+
+                                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                            HorizontalContentAlignment="Center"
+                                                            Margin="5,4,6,4"
+                                                            VerticalAlignment="Center"
+                                                            VerticalContentAlignment="Center"
+                                                            Text="{Binding TempRe}" />
+
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </GroupBox>
+                                            <GroupBox IsEnabled="{Binding SelectedMethod.Real}"
+                                                      Header="Method parameters">
+                                                <StackPanel Orientation="Vertical">
+                                                    <TextBox
+                                                        materialDesign:TextFieldAssist.SuffixText="°С"
+                                                        materialDesign:HintAssist.Hint="Solution accuracy"
+                                                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                        HorizontalContentAlignment="Left"
+                                                        Margin="5,4,6,4"
+                                                        VerticalAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        Text="{Binding Step}" />
+                                                </StackPanel>
+
+                                            </GroupBox>
+                                            <Button
+                                                IsEnabled="{Binding SelectedMethod.Real}"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Margin="10"
+                                                Command="{Binding CalculateCommand}"
+                                                Content="Calculate"
+                                                Style="{StaticResource MaterialDesignRaisedSecondaryButton}" />
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </materialDesign:Card>
+                            </Grid>
+                            <Grid Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="6*" />
+
+                                </Grid.RowDefinitions>
+                                <Grid Row=" 0">
+                                    <Viewbox>
+                                        <StackPanel Orientation="Horizontal">
+
+                                            <TextBox
+                                                IsReadOnly="True"
+                                                MinWidth="200"
+                                                materialDesign:TextFieldAssist.SuffixText="°С"
+                                                materialDesign:HintAssist.Hint="Optimal T1"
+
+                                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                HorizontalContentAlignment="Center"
+                                                Margin="5,4,6,4"
+                                                VerticalAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                Text="{Binding ResultT1}" />
+                                            <TextBox
+                                                IsReadOnly="True"
+
+                                                MinWidth="200"
+                                                materialDesign:TextFieldAssist.SuffixText="°С"
+                                                materialDesign:HintAssist.Hint="Optimal T2"
+                                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                HorizontalContentAlignment="Center"
+                                                Margin="5,4,6,4"
+                                                VerticalAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                Text="{Binding ResultT2}" />
+
+                                            <TextBox
+                                                IsReadOnly="True"
+
+                                                MinWidth="200"
+                                                materialDesign:TextFieldAssist.SuffixText="у.е."
+                                                materialDesign:HintAssist.Hint="Optimal cost"
+                                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                HorizontalContentAlignment="Center"
+                                                Margin="5,4,6,4"
+                                                VerticalAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                Text="{Binding OptimalCost}" />
+
+                                        </StackPanel>
+                                    </Viewbox>
+                                </Grid>
+                                <Grid Row=" 1">
+                                    <TabControl
+                                        materialDesign:ColorZoneAssist.Background="Crimson"
+                                        materialDesign:ColorZoneAssist.Foreground="White"
+                                        materialDesign:ColorZoneAssist.Mode="Custom"
+                                        Style="{StaticResource MaterialDesignFilledTabControl}"
+                                        RenderTransformOrigin="0.502,0.871">
+                                        <TabItem
+                                            Header="Result table">
+                                                <DataGrid 
+                                                          ItemsSource="{Binding TableDatas}" CanUserAddRows="False"
+                                                          ColumnWidth="300" />
+                              
+                                        </TabItem>
+                                        <TabItem
+                                            Header="3D plot">
+                                            <Grid>
+                                                <s3D:SciChart3DSurface
+                                                    IsFpsCounterVisible="False"
+                                                    ShowLicensingWarnings="False"
+                                                    WorldDimensions="200,200,200"
+                                                    RenderableSeries="{extensions:SeriesBinding RenderableSeriesViewModels}">
+
+                                                    <s3D:SciChart3DSurface.Camera>
+                                                        <s3D:Camera3D Position="200,200,200" ZoomToFitOnAttach="True" />
+                                                    </s3D:SciChart3DSurface.Camera>
+
+                                                    <s3D:SciChart3DSurface.XAxis>
+                                                        <s3D:NumericAxis3D AxisTitle="T2"
+                                                                           VisibleRange="{Binding T1Range}" />
+                                                    </s3D:SciChart3DSurface.XAxis>
+
+                                                    <s3D:SciChart3DSurface.YAxis>
+                                                        <s3D:NumericAxis3D AxisTitle="Cost" AutoRange="Always" />
+                                                    </s3D:SciChart3DSurface.YAxis>
+
+                                                    <s3D:SciChart3DSurface.ZAxis>
+                                                        <s3D:NumericAxis3D AxisTitle="T1"
+                                                                           VisibleRange="{Binding T2Range}" />
+                                                    </s3D:SciChart3DSurface.ZAxis>
+
+                                                    <s3D:SciChart3DSurface.ChartModifier>
+                                                        <s3D:ModifierGroup3D>
+                                                            <s3D:FreeLookModifier3D ExecuteOn="MouseLeftButton"
+                                                                ExecuteWhen="Shift"
+                                                                IsEnabled="False" />
+                                                            <s3D:OrbitModifier3D ExecuteOn="MouseLeftButton" />
+                                                            <s3D:VertexSelectionModifier3D ExecuteOn="MouseLeftButton"
+                                                                ExecuteWhen="Ctrl"
+                                                                IsEnabled="False" />
+                                                            <s3D:MouseWheelZoomModifier3D />
+                                                            <s3D:ZoomExtentsModifier3D AnimateDurationMs="500"
+                                                                ResetPosition="200,200,200"
+                                                                ResetTarget="0,0,0" />
+                                                        </s3D:ModifierGroup3D>
+                                                    </s3D:SciChart3DSurface.ChartModifier>
+                                                </s3D:SciChart3DSurface>
+                                            </Grid>
+
+                                        </TabItem>
+
+                                        <TabItem
+                                            Header="2D plot">
+                                            <wpf:CartesianChart
+                                                Grid.Row="0" Grid.Column="1"
+                                                Margin="5"
+                                                Series="{Binding SearchedPoint}"
+                                                YAxes="{Binding YAxesV}"
+                                                XAxes="{Binding XAxesV}" />
+
+                                        </TabItem>
+                                    </TabControl>
+
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </materialDesign:Card>
+
+    </Grid>
+</Window>

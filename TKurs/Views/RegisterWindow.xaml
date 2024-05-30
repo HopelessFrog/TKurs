@@ -1,0 +1,64 @@
+﻿<Window x:Class="TKurs.Views.RegisterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TKurs.Views"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:viewModels="clr-namespace:TKurs.ViewModels"
+        mc:Ignorable="d"
+        Style="{StaticResource MaterialDesignWindow}"
+        Title="RegisterWindow" Height="550" Width="350">
+
+    <Window.DataContext>
+        <viewModels:RegisterViewModel/>
+    </Window.DataContext>
+
+
+    <Grid>
+
+        <Rectangle Height="400" VerticalAlignment="Top">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF2281D1" />
+
+                    <GradientStop Color="#aeea00" Offset="1" />
+                    <GradientStop Color="#52a852" Offset="0.546" />
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle Width="280" Height="400" VerticalAlignment="Bottom" Margin="0,30,0,80" RadiusY="10" RadiusX="10"
+                Fill="White">
+            <Rectangle.Effect>
+                <DropShadowEffect BlurRadius="15" Direction="0" RenderingBias="Quality" ShadowDepth="1"
+                               Color="#FFBBBBBB" />
+            </Rectangle.Effect>
+        </Rectangle>
+
+        <Grid VerticalAlignment="Bottom" Margin="35,30,30,80" Height="400">
+
+            <Label Content="REGISTER" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="15"
+                Foreground="#52a852"
+                FontSize="18" />
+            <StackPanel VerticalAlignment="Center" Margin="15">
+                <TextBox Text="{Binding Login}" Margin="0,10" materialDesign:HintAssist.Hint="Login"
+                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                      FontFamily="Champagne &amp; Limousines" FontSize="18" />
+
+                <PasswordBox
+                 materialDesign:PasswordBoxAssist.Password="{Binding Path=Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
+                 Margin="0,10" materialDesign:HintAssist.Hint="Password"
+                 FontFamily="Champagne &amp; Limousines" FontSize="18" />
+                <PasswordBox
+                 materialDesign:PasswordBoxAssist.Password="{Binding Path=ComfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
+                 Margin="0,10" materialDesign:HintAssist.Hint="Confirm password"
+                 Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                 FontFamily="Champagne &amp; Limousines" FontSize="18" />
+            </StackPanel>
+        </Grid>
+        <Button Style="{StaticResource MaterialDesignRaisedSecondaryButton}" Command="{Binding RegisterCommand}" Width="150"
+             HorizontalAlignment="Center" VerticalAlignment="Bottom"
+             Margin="0,65" Content="REGISTER" />
+
+    </Grid>
+</Window>
