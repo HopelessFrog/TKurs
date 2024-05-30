@@ -210,6 +210,7 @@ namespace TKurs.ViewModels
                 _context.SaveChanges();
             };
             SelectedTask = null;
+            SelectedMethod = Methods[0];
         }
 
 
