@@ -837,6 +837,8 @@
                                         <TabItem
                                             Header="2D plot">
                                             <wpf:CartesianChart
+                                                
+                                              
                                                 Grid.Row="0" Grid.Column="1"
                                                 Margin="5"
                                                 Series="{Binding SearchedPoint}"

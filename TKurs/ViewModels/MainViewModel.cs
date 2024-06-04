@@ -274,8 +274,8 @@ namespace TKurs.ViewModels
                 }
                 
 
-                var T1size = (int)((Math.Abs(MinT1) + Math.Abs(MaxT1)) / Step) + 1;
-                var T2size = (int)((Math.Abs(MinT2) + Math.Abs(MaxT2)) / Step) + 1;
+                var T1size = (int)((Math.Abs(MinT1) + Math.Abs(MaxT1)) / Step) + 2;
+                var T2size = (int)((Math.Abs(MinT2) + Math.Abs(MaxT2)) / Step) + 2;
 
                 T1Range = new DoubleRange(MinT1, MaxT1);
                 T2Range = new DoubleRange(MinT2, MaxT2);
@@ -306,46 +306,16 @@ namespace TKurs.ViewModels
                     }
                 }
 
-                //Series = new NonUniformGridDataSeries3D<double>(xS.Count, zS.Count, xIndex => yS[xIndex],
-                //    yIndex => zS[yIndex]);
-                //Series.IsDirty = false;
-                //Series.IsHeightmapDirty = false;
-                //Series.IsMeshDirty = false;
-
-
-                //var qqq = new List<double>();
-
-                //for (int z = 0; z < zS.Count; z++)
-                //{
-                //    for (int y = 0; y < yS.Count; y++)
-                //    {
-                //        Series[z, y] = FiltrationProcess.CalculateCost(FiltrationProcess.CalculateVolume(yS[y], zS[z]));
-                //    }
-                //}
-
-                //var eee = new GradientColorPalette()
-                //{
-                //    GradientStops = new System.Collections.ObjectModel.ObservableCollection<GradientStop>
-                //    {
-                //        new GradientStop(Colors.Aqua, 0),
-                //        new GradientStop(Colors.AliceBlue, 0.1),
-                //        new GradientStop(Colors.AntiqueWhite, 0.2),
-                //        new GradientStop(Colors.Aquamarine, 0.3),
-                //        new GradientStop(Colors.DarkGray, 0.4),
-                //        new GradientStop(Colors.DarkSeaGreen, 0.5),
-                //        new GradientStop(Colors.Green, 0.6),
-                //        new GradientStop(Colors.ForestGreen, 0.7),
-                //        new GradientStop(Colors.LightSeaGreen, 0.8),
-                //        new GradientStop(Colors.GreenYellow, 0.9),
-                //        new GradientStop(Colors.Yellow, 1),
-                //    },
-                //    IsStepped = false,
-                //};
+               
 
                 
                 ResultT1 = Math.Round(result.T1, 3);
                 ResultT2 = Math.Round(result.T2, 3);
                 OptimalCost = Math.Round(result.OptimalCost, 3);
+
+                HeatMapValue = new ObservableCollection<WeightedPoint>();
+                
+
 
 
                 //var qwe = zS.Max();
@@ -362,28 +332,85 @@ namespace TKurs.ViewModels
                 });
                 SearchedPoint = new ObservableCollection<ISeries>
                 {
+                   
+                    
+                    new HeatSeries<WeightedPoint>
+                    {
+                       PointPadding = new LiveChartsCore.Drawing.Padding(0),
+                       
+
+                           HeatMap = new[]
+                     {
+
+                            SKColors.Black.AsLvcColor(),
+                            SKColors.Gray.AsLvcColor(),
+                            SKColors.Blue.AsLvcColor(),
+                            SKColors.Yellow.AsLvcColor(),
+                            SKColors.Orange.AsLvcColor(),
+                            SKColors.Red.AsLvcColor(),
+                            SKColors.Red.AsLvcColor(),
+
+                         },
+                           Values = HeatMapValue
+
+
+                    },
                     new ScatterSeries<ObservablePoint>
                     {
+                        ZIndex = 1500,
+
                         Values = new ObservableCollection<ObservablePoint>
                         {
                            new(ResultT1,ResultT2)
                         }
                     }
+
+
                 };
 
+                for (int i = 0;i < xS.Count; i++)
+                {
+                    HeatMapValue.Add(new(yS[i], zS[i], xS[i]));
+                }
+
+                XAxesV = new Axis[]
+                {
+                     new Axis
+                       {
+                            MinLimit = MinT1,
+                            MaxLimit = MaxT1,
+                            Name = "T1 \u00b0C",
+                       }
+                };
+
+                YAxesV = new Axis[]
+                {
+                     new Axis
+                       {
+                            MinLimit = MinT2,
+                            MaxLimit = MaxT2,
+                            Name = "T2 \u00b0C",
+                       }
+                };
 
             }
         }
+
+        public ObservableCollection<WeightedPoint> HeatMapValue { get; set; }
+       
+
         [ObservableProperty]
         private IEnumerable<ISeries> searchedPoint;
 
         [ObservableProperty]
         private Axis[] xAxesV =
         {
-            new Axis
-            {
-                Name = "T1 \u00b0C",
-            }
+              new Axis
+                       {
+
+                            Name = "T1 \u00b0C",
+                       }
+
         };
         [ObservableProperty]
         private Axis[] yAxesV =
